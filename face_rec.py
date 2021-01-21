@@ -11,8 +11,6 @@ MODEL = "cnn"
 
 #video = cv2.VideoCapture(0)
 
-#main_dir = "D:\face recognition\"
-
 # Returns (R, G, B) from name
 def name_to_color(name):
     # Take 3 first letters, tolower()
@@ -31,7 +29,7 @@ for name in os.listdir(KNOWN_FACES_DIR):
         image = face_recognition.load_image_file(f"{KNOWN_FACES_DIR}/{name}/{filename}")
 
         #cv2.imshow(filename, image)
-        cv2.waitKey(0)
+        #cv2.waitKey(0)
 
         encoding = face_recognition.face_encodings(image)[0]
         
@@ -39,7 +37,7 @@ for name in os.listdir(KNOWN_FACES_DIR):
         known_names.append(name)
        
 
-print("loading UNknown faces")
+print("loading unknown faces")
 
 for filename in os.listdir(UNKNOWN_FACES_DIR):
 #while True:
@@ -59,7 +57,7 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
 
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
-    # But this time we assume that there might be more faces in an image - we can find faces of dirrerent people
+    # Find faces
     print(f', found {len(encodings)} face(s)')
     for face_encoding, face_location in zip(encodings, locations):
 
@@ -68,7 +66,7 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
         results = face_recognition.compare_faces(known_faces, face_encoding, TOLERANCE)
 
         # Since order is being preserved, we check if any face was found then grab index
-        # then label (name) of first matching known face withing a tolerance
+        # then label (name) of first matching known face within a tolerance
         match = None
         if True in results:  # If at least one is true, get a name of first of found labels
             match = known_names[results.index(True)]
@@ -84,7 +82,7 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
             # Paint frame
             cv2.rectangle(resize_image, top_left, bottom_right, color, FRAME_THICKNESS)
 
-            # Now we need smaller, filled grame below for a name
+            # Now we need smaller, filled frame below for a name
             # This time we use bottom in both corners - to start from bottom and move 50 pixels down
             top_left = (face_location[3], face_location[2])
             bottom_right = (face_location[1], face_location[2] + 22)
@@ -97,9 +95,9 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
 
     # Show image
     cv2.imshow(filename, resize_image)
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
-    #cv2.waitKey(0)
+    #if cv2.waitKey(1) & 0xFF == ord("q"):
+    #    break
+    cv2.waitKey(0)
     #cv2.destroyWindow(filename)
 
 video.release()
